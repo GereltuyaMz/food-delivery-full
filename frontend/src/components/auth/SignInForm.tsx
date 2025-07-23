@@ -41,7 +41,6 @@ export function SignInForm() {
   });
 
   const onSubmit = async (formData: SignInFormData) => {
-    console.log("formData", formData);
     try {
       const response = await axios.post(`${apiUrl}/user/signUp`, formData);
       return response.data.user;
