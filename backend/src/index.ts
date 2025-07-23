@@ -4,12 +4,14 @@ import userRouter from "./routes/user.route";
 import foodOrderRouter from "./routes/foodOrder.route";
 import mongoose from "mongoose";
 import dotenv from "dotenv";
+import cors from "cors";
 
 dotenv.config(); // env buh values
 
 mongoose.connect(process.env.MONGO_URI as string);
 
 const server = express();
+server.use(cors());
 server.use(express.json());
 
 const port = process.env.PORT;
@@ -23,5 +25,5 @@ server.get("/", (_request, response) => {
 });
 
 server.listen(port, () => {
-  console.log(`server aslaa: ${port}`);
+  console.log(`Server running on http://localhost:${port}`);
 });
