@@ -10,9 +10,12 @@ export const signup = async (req: Request, res: any) => {
     if (!email || !password) {
       return res.status(400).json({ message: "Хоосон утга байж болохгүй." });
     }
+
+    const hashedPassword = await bcrypt.hash(password, 10);
+
     const createdUser = await User.create({
       email,
-      password,
+      password: hashedPassword,
     });
     res
       .status(201)
