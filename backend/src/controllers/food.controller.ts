@@ -20,7 +20,7 @@ export const getAllFoods = async (request: Request, response: Response) => {
 
 export const getFoodByid = async (request: Request, response: Response) => {
   try {
-    const { foodId } = request.params; // 6853b667726e33f014c6f024
+    const { foodId } = request.params;
     const food = await Food.findById(foodId);
 
     response.json({

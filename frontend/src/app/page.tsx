@@ -2,8 +2,12 @@
 
 import { FoodCard } from "@/components/home/FoodCard";
 import { Header } from "@/components/layout";
+import { useState } from "react";
+import { FoodDetailModal } from "@/components/home/FoodDetailModal";
 
 export default function FoodMenuPage() {
+  const [openModal, setOpenModal] = useState(false);
+
   const foodItems = [
     {
       id: "1",
@@ -31,6 +35,10 @@ export default function FoodMenuPage() {
     },
   ];
 
+  const handleClose = () => {
+    setOpenModal(false);
+  };
+
   return (
     <>
       <Header />
@@ -47,9 +55,11 @@ export default function FoodMenuPage() {
                 description={item.description}
                 price={item.price}
                 image={item.image}
+                setOpenModal={setOpenModal}
               />
             ))}
           </div>
+          <FoodDetailModal openModal={openModal} closeModal={handleClose} />
         </div>
       </div>
     </>

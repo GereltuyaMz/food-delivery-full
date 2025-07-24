@@ -15,6 +15,8 @@ import { useForm } from "react-hook-form";
 import * as yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
 import axios from "axios";
+import { useRouter } from "next/navigation";
+import { apiUrl } from "@/lib/utils";
 
 const signInSchema = yup.object({
   email: yup
@@ -29,8 +31,9 @@ const signInSchema = yup.object({
 
 type SignInFormData = yup.InferType<typeof signInSchema>;
 
-const apiUrl = "http://localhost:3000";
 export function SignInForm() {
+  const router = useRouter();
+
   const {
     register,
     handleSubmit,
@@ -42,7 +45,9 @@ export function SignInForm() {
 
   const onSubmit = async (formData: SignInFormData) => {
     try {
-      const response = await axios.post(`${apiUrl}/user/signUp`, formData);
+      const response = await axios.post(`${apiUrl}/user/logIn`, formData);
+      localStorage.setItem("email", response.data.user?.email);
+      router.push("/");
       return response.data.user;
     } catch (error) {
       console.error("Error fetching data:", error);

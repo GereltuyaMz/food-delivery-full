@@ -12,6 +12,7 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import { useState } from "react";
 import axios from "axios";
 import { useRouter } from "next/navigation";
+import { apiUrl } from "@/lib/utils";
 
 const passwordSchema = yup.object({
   password: yup
@@ -40,10 +41,11 @@ export const PasswordStep = ({ emailData }: { emailData: string }) => {
 
   const onSubmit = async (passwordData: PasswordFormData) => {
     try {
-      const response = await axios.post("http://localhost:3000/user/signUp", {
+      const user = {
         email: emailData,
         password: passwordData.confirmPassword,
-      });
+      };
+      const response = await axios.post(`${apiUrl}/user/signUp`, user);
 
       if (response.status === 201) {
         router.push("/");

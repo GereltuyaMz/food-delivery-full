@@ -10,8 +10,17 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import { useContext } from "react";
+import { UserContext } from "@/context/userContext";
 
 export const Header = () => {
+  const { userInfo } = useContext(UserContext);
+  console.log("userInfo in header", userInfo);
+  const signOut = () => {
+    console.log("remove");
+    localStorage.removeItem("email");
+  };
+
   return (
     <header className="bg-gray-900 text-white px-4 py-3">
       <div className="max-w-7xl mx-auto flex items-center justify-between">
@@ -57,11 +66,16 @@ export const Header = () => {
               <DropdownMenuLabel className="font-normal">
                 <div className="flex flex-col space-y-1">
                   <p className="text-sm font-medium leading-none">Account</p>
-                  <p className="text-xs leading-none text-gray-500"></p>
+                  <p className="text-xs leading-none text-gray-500">
+                    {userInfo.email}
+                  </p>
                 </div>
               </DropdownMenuLabel>
               <DropdownMenuSeparator />
-              <DropdownMenuItem className="text-red-600 focus:text-red-600 focus:bg-red-50 cursor-pointer">
+              <DropdownMenuItem
+                className="text-red-600 focus:text-red-600 focus:bg-red-50 cursor-pointer"
+                onClick={signOut}
+              >
                 <LogOut className="mr-2 h-4 w-4" />
                 <span>Sign out</span>
               </DropdownMenuItem>

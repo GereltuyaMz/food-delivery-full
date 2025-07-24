@@ -6,9 +6,17 @@ import { Button } from "@/components/ui/button";
 import { Dialog, DialogContent, DialogHeader } from "@/components/ui/dialog";
 import { DialogTitle } from "@radix-ui/react-dialog";
 
-export const FoodDetailModal = () => {
+type FoodDetailModalProps = {
+  openModal: boolean;
+  closeModal: () => void;
+};
+
+export const FoodDetailModal = ({
+  openModal,
+  closeModal,
+}: FoodDetailModalProps) => {
   return (
-    <Dialog>
+    <Dialog open={openModal}>
       <DialogContent className="max-w-md mx-auto bg-white rounded-3xl p-0 overflow-hidden">
         <DialogHeader className="p-0">
           <DialogTitle>
@@ -16,6 +24,7 @@ export const FoodDetailModal = () => {
               variant="ghost"
               size="icon"
               className="absolute top-4 right-4 z-10 bg-white/80 hover:bg-white rounded-full"
+              onClick={closeModal}
             >
               <X className="w-5 h-5" />
             </Button>

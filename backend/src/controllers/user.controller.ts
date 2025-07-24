@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { Request } from "express";
+import { Request, Response } from "express";
 import bcrypt from "bcrypt";
 import { User } from "../models/user.model";
 import { generateToken } from "../util/generateToken";
@@ -50,14 +50,29 @@ export const login = async (req: Request, res: any) => {
         });
       } else {
         const token = generateToken({ id: user._id });
-        const { phoneNumber, email, address } = user;
+        const { email } = user;
         res.status(200).json({
           message: "success",
           token,
-          user: { email, phoneNumber, address },
+          user: { email },
         });
       }
     }
+  } catch (error) {
+    res.status(400).json({ error });
+  }
+};
+
+export const getUser = async (req: Request, res: Response) => {
+  try {
+    const { email } = req.body;
+    console.log("email", email);
+    const user = await User.findOne({ email });
+    res.status(200).json({
+      message: "success",
+      email: user?.email,
+      role: user?.role,
+    });
   } catch (error) {
     res.status(400).json({ error });
   }
