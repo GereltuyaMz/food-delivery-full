@@ -46,7 +46,7 @@ export function SignInForm() {
   const onSubmit = async (formData: SignInFormData) => {
     try {
       const response = await axios.post(`${apiUrl}/user/logIn`, formData);
-      localStorage.setItem("email", response.data.user?.email);
+      localStorage.setItem("token", response.data.token);
       router.push("/");
       return response.data.user;
     } catch (error) {

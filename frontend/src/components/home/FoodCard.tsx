@@ -4,27 +4,28 @@ import { Plus } from "lucide-react";
 import Image from "next/image";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
-import { Dispatch, SetStateAction } from "react";
 
 type FoodCardProps = {
+  id: string;
   title: string;
   description: string;
   price: number;
   image: string;
-  setOpenModal: Dispatch<SetStateAction<boolean>>;
+  selectFood: (foodId: string) => void;
 };
 
 export function FoodCard({
+  id,
   title,
   description,
   price,
   image,
-  setOpenModal,
+  selectFood,
 }: FoodCardProps) {
   return (
     <Card
       className="w-full max-w-sm bg-white rounded-2xl shadow-lg overflow-hidden py-0"
-      onClick={() => setOpenModal(true)}
+      onClick={() => selectFood(id)}
     >
       <div className="relative">
         <div className="aspect-[4/3] relative overflow-hidden rounded-t-2xl">

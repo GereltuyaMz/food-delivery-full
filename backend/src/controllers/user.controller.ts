@@ -49,7 +49,9 @@ export const login = async (req: Request, res: any) => {
           message: "Хэрэглэгчийн имэйл эсвэл нууц үг тохирохгүй байна.",
         });
       } else {
-        const token = generateToken({ id: user._id });
+        const token = generateToken({
+          id: user._id,
+        });
         const { email } = user;
         res.status(200).json({
           message: "success",
@@ -65,9 +67,8 @@ export const login = async (req: Request, res: any) => {
 
 export const getUser = async (req: Request, res: Response) => {
   try {
-    const { email } = req.body;
-    console.log("email", email);
-    const user = await User.findOne({ email });
+    const { id } = req.user;
+    const user = await User.findOne({ _id: id });
     res.status(200).json({
       message: "success",
       email: user?.email,

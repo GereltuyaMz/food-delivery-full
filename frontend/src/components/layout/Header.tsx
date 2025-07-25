@@ -10,14 +10,14 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { useContext } from "react";
+import { useContext, useState } from "react";
 import { UserContext } from "@/context/userContext";
+import { Cart } from "../home";
 
 export const Header = () => {
   const { userInfo } = useContext(UserContext);
-  console.log("userInfo in header", userInfo);
+  const [openCart, setOpenCart] = useState(false);
   const signOut = () => {
-    console.log("remove");
     localStorage.removeItem("email");
   };
 
@@ -45,6 +45,7 @@ export const Header = () => {
             variant="outline"
             size="icon"
             className="bg-white text-gray-900 border-white hover:bg-gray-100 rounded-full relative"
+            onClick={() => setOpenCart(true)}
           >
             <ShoppingCart className="w-5 h-5" />
           </Button>
@@ -83,6 +84,7 @@ export const Header = () => {
           </DropdownMenu>
         </div>
       </div>
+      <Cart openCart={openCart} setOpenCart={setOpenCart} />
     </header>
   );
 };

@@ -3,6 +3,7 @@
 import axios from "axios";
 import { createContext, Dispatch, SetStateAction, useState } from "react";
 import { useEffect } from "react";
+import { apiUrl } from "@/lib/utils";
 
 type User = {
   email: string;
@@ -26,15 +27,12 @@ export const UserContextProvider = ({
   const [userInfo, setUserInfo] = useState<User>({ email: "" });
 
   const getCurrentUser = async () => {
-    const userEmail = localStorage.getItem("email");
+    const userToken = localStorage.getItem("token");
+
     try {
-      const response = await axios.post(
-        "http://localhost:3000/user/currentUser",
-        {
-          email: userEmail,
-        }
-      );
-      console.log("response", response.data);
+      const response = await axios.get(`${apiUrl}/user/currentUser`, {
+        headers: { Authorization: `Bearer ${userToken}` },
+      });
       setUserInfo(response.data);
     } catch (error) {
       console.error(error);

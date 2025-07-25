@@ -5,16 +5,30 @@ import Image from "next/image";
 import { Button } from "@/components/ui/button";
 import { Dialog, DialogContent, DialogHeader } from "@/components/ui/dialog";
 import { DialogTitle } from "@radix-ui/react-dialog";
+import { Food } from "@/lib/types";
+import { useContext } from "react";
+import { CartContext } from "@/context/cartContext";
+import { toast } from "sonner";
 
 type FoodDetailModalProps = {
   openModal: boolean;
   closeModal: () => void;
+  food: Food;
 };
 
 export const FoodDetailModal = ({
   openModal,
   closeModal,
+  food,
 }: FoodDetailModalProps) => {
+  const { addToCart } = useContext(CartContext);
+
+  const handleAddToCart = (foodItem: Food) => {
+    addToCart({ ...foodItem });
+    closeModal();
+    toast("Successfully added to cart");
+  };
+
   return (
     <Dialog open={openModal}>
       <DialogContent className="max-w-md mx-auto bg-white rounded-3xl p-0 overflow-hidden">
@@ -31,7 +45,7 @@ export const FoodDetailModal = ({
 
             <div className="aspect-[4/3] relative overflow-hidden rounded-t-3xl">
               <Image
-                src="/images/foodDetail.png"
+                src={food.image}
                 alt="name"
                 fill
                 className="object-cover"
@@ -43,11 +57,8 @@ export const FoodDetailModal = ({
 
         <div className="p-6 space-y-6">
           <div className="space-y-3">
-            <h2 className="text-2xl font-bold text-red-500">name</h2>
-            <p className="text-gray-600 leading-relaxed">
-              Lorem ipsum dolor, sit amet consectetur adipisicing elit. Quos,
-              quidem?
-            </p>
+            <h2 className="text-2xl font-bold text-red-500">{food.foodName}</h2>
+            <p className="text-gray-600 leading-relaxed">{food.ingredients}</p>
           </div>
 
           <div className="space-y-4">
@@ -75,10 +86,15 @@ export const FoodDetailModal = ({
                 </div>
               </div>
             </div>
-            <div className="text-3xl font-bold text-gray-900">$20</div>
+            <div className="text-3xl font-bold text-gray-900">
+              ${food.price}
+            </div>
           </div>
 
-          <Button className="w-full bg-gray-900 hover:bg-gray-800 text-white py-4 rounded-2xl text-lg font-medium">
+          <Button
+            className="w-full bg-gray-900 hover:bg-gray-800 text-white py-4 rounded-2xl text-lg font-medium"
+            onClick={() => handleAddToCart({ ...food })}
+          >
             Add to cart
           </Button>
         </div>

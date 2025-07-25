@@ -1,42 +1,47 @@
 "use client";
 
-import { FoodCard } from "@/components/home/FoodCard";
 import { Header } from "@/components/layout";
-import { useState } from "react";
-import { FoodDetailModal } from "@/components/home/FoodDetailModal";
+import { useEffect, useState } from "react";
+import { FoodCard, FoodDetailModal } from "@/components/home";
+import axios from "axios";
+import { apiUrl } from "@/lib/utils";
+import { Food } from "@/lib/types";
 
 export default function FoodMenuPage() {
   const [openModal, setOpenModal] = useState(false);
+  const [data, setData] = useState<Food[]>([
+    {
+      _id: "",
+      foodName: "",
+      price: 0,
+      ingredients: "",
+      image: "",
+    },
+  ]);
+  const [food, setFood] = useState<Food>({
+    foodName: "",
+    price: 0,
+    ingredients: "",
+    image: "",
+  });
 
-  const foodItems = [
-    {
-      id: "1",
-      title: "Finger food",
-      description:
-        "Fluffy pancakes stacked with fruits, cream, syrup, and powdered sugar.",
-      price: 12.99,
-      image: "/images/food1.png",
-    },
-    {
-      id: "2",
-      title: "Gourmet Burger",
-      description:
-        "Juicy beef patty with fresh lettuce, tomatoes, and special sauce.",
-      price: 15.99,
-      image: "/images/food2.png",
-    },
-    {
-      id: "3",
-      title: "Caesar Salad",
-      description:
-        "Fresh romaine lettuce with parmesan cheese, croutons, and caesar dressing.",
-      price: 9.99,
-      image: "/images/food3.png",
-    },
-  ];
+  const getFoodData = async () => {
+    const response = await axios.get(`${apiUrl}/food`);
+    setData(response.data.data);
+  };
+
+  useEffect(() => {
+    getFoodData();
+  }, []);
 
   const handleClose = () => {
     setOpenModal(false);
+  };
+
+  const selectFood = async (foodId: string) => {
+    const response = await axios.get(`${apiUrl}/food/${foodId}`);
+    setFood(response.data.data);
+    setOpenModal(true);
   };
 
   return (
@@ -48,18 +53,23 @@ export default function FoodMenuPage() {
             Our Menu
           </h1>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 max-w-6xl mx-auto">
-            {foodItems.map((item) => (
+            {data.map((item) => (
               <FoodCard
-                key={item.id}
-                title={item.title}
-                description={item.description}
+                key={item._id}
+                id={item._id || ""}
+                title={item.foodName}
+                description={item.ingredients}
                 price={item.price}
                 image={item.image}
-                setOpenModal={setOpenModal}
+                selectFood={selectFood}
               />
             ))}
           </div>
-          <FoodDetailModal openModal={openModal} closeModal={handleClose} />
+          <FoodDetailModal
+            openModal={openModal}
+            closeModal={handleClose}
+            food={food}
+          />
         </div>
       </div>
     </>
